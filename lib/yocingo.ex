@@ -13,22 +13,22 @@ defmodule Yocingo do
   @api_url "https://api.telegram.org/bot"
 
   # This function reads the token from the file called token
-  # defp get_token do
-  #   token = Application.get_env(:yocingo, :token)
-  #   # if is_nil(token) do
-  #   #   {ret, body} = File.read "token"
-  #   #   token = case ret do
-  #   #             :ok -> String.strip((String.strip body, ?\n), ?\r) # For Linux and Windows :D
-  #   #             :error -> raise File, message: "File Token not found"
-  #   #           end
-  #   #   Application.put_env(:yocingo, :token, token)
-  #   # end
-  #   token
-  # end
+  defp get_token do
+    token = Application.get_env(:yocingo, :token)
+    if is_nil(token) do
+      {ret, body} = File.read "token"
+      token = case ret do
+                :ok -> String.strip((String.strip body, ?\n), ?\r) # For Linux and Windows :D
+                :error -> raise File, message: "File Token not found"
+              end
+      Application.put_env(:yocingo, :token, token)
+    end
+    token
+  end
 
   # Creates the proper API method URL
   defp build_url(method) do
-    @api_url <> Application.get_env(:yocingo, :token) <> "/" <>method
+    @api_url <> get_token <> "/" <>method
   end
 
   # Obtains and parses a petition
